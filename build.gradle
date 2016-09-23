@@ -1,0 +1,61 @@
+buildscript {
+	ext {
+		springBootVersion = '1.3.3.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") 
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse-wtp'
+apply plugin: 'spring-boot' 
+apply plugin: 'war'
+
+war {
+	baseName = 'jasypt-example'
+	version = '1.0'
+}
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+}
+
+configurations {
+	providedRuntime
+}
+
+task javadocs(type: Javadoc) {    
+    source = sourceSets.main.allJava
+    classpath = configurations.compile
+    destinationDir = file("./javadoc/")
+ }
+  
+dependencies {
+	compile project(':msp-shared')
+/	
+	compile('org.springframework.boot:spring-boot-starter-web')
+	compile('org.springframework.boot:spring-boot-starter-ws')
+	compile('org.springframework.boot:spring-boot-starter-amqp')
+	
+	//log4j2 
+	compile('org.apache.logging.log4j:log4j-api:2.5')
+	compile('org.apache.logging.log4j:log4j-core:2.5')
+  	
+  	//health check
+  	compile('org.springframework.boot:spring-boot-starter-actuator')
+
+/
+  	//jasypt
+  	compile('com.github.ulisesbocchio:jasypt-spring-boot:1.8')
+  	
+	providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
+	
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+	
+}
